@@ -141,13 +141,18 @@ export function validateAnswers(questions, answers) {
     const keys = q.type === 'choice' ? Object.keys(q.criteria) : q.criteria.map((_, i) => String(i));
     ensure(Object.keys(a.probabilities).length === keys.length && keys.every(k => Object.hasOwn(a.probabilities, k)), `Probability options mismatch: ${id}`);
     keys.forEach(k => probability(a.probabilities[k], `${id}.${k}`));
-    ensure(Math.abs(keys.reduce((sum, k) => sum + a.probabilities[k], 0) - 1) <= 0.001, `Probabilities must sum to 1: ${id}`);
+    // Jev returns probabilities rounded to two decimals. Each category can therefore contribute up to 0.005 of
+    // quantization error; derive the tolerance from the declared finite option count instead of requiring an
+    // impossible exact sum for wider Choice/Score questions.
+    const roundingTolerance = 0.005 * keys.length + Number.EPSILON;
+    ensure(Math.abs(keys.reduce((sum, k) => sum + a.probabilities[k], 0) - 1) <= roundingTolerance, `Probabilities must sum to 1 within rounding tolerance: ${id}`);
     if (q.type === 'choice') {
       ensure(keys.includes(a.choice), `Unknown choice: ${id}`);
-      ensure(a.probabilities[a.choice] >= Math.max(...Object.values(a.probabilities)) - 0.001, `Choice is not highest probability: ${id}`);
+      ensure(a.probabilities[a.choice] >= Math.max(...Object.values(a.probabilities)) - 0.01, `Choice is not highest probability: ${id}`);
     } else {
       const expected = keys.reduce((sum, k) => sum + Number(k) * a.probabilities[k], 0);
-      ensure(Number.isFinite(a.score) && a.score >= 0 && a.score <= keys.length - 1 && Math.abs(a.score - expected) <= 0.01, `Invalid expected score: ${id}`);
+      const scoreRoundingTolerance = 0.005 * (1 + keys.reduce((sum, k) => sum + Number(k), 0));
+      ensure(Number.isFinite(a.score) && a.score >= 0 && a.score <= keys.length - 1 && Math.abs(a.score - expected) <= scoreRoundingTolerance, `Invalid expected score: ${id}`);
     }
   }
 }

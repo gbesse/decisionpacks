@@ -33,7 +33,7 @@ probabilities when analyzing results and validate thresholds against labeled out
 
 Providers receive `{ model, state, questions, signal }` and return `{ model, answers }`.
 Responses must include every requested answer exactly once. Probability distributions
-must sum to one within 0.001; selected choices must maximize probability within that
+must sum to one within the maximum two-decimal rounding error implied by the declared option count; selected choices must maximize probability within that
 tolerance. Score must agree with its weighted levels within 0.01.
 
 `evaluate(pack, state, { provider, signal, timeoutMs, onRecord })` snapshots inputs and
