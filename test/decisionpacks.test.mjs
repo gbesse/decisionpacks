@@ -38,6 +38,17 @@ test('score must agree with the returned distribution', () => {
   validateAnswers(questions, answers);
   assert.throws(() => validateAnswers(questions, { rating: { ...answers.rating, score: 9 } }), /score/);
 });
+test('accepts documented two-decimal probability rounding without accepting malformed distributions', () => {
+  const choices = { blocker: { type: 'choice', criteria: { none: 'a', deadline: 'b', qualification: 'c', geography: 'd', capacity: 'e', unknown: 'f' } } };
+  const roundedChoice = { blocker: { type: 'choice', choice: 'none', confidence: 0.51, probabilities: { none: 0.51, deadline: 0.17, qualification: 0.1, geography: 0.1, capacity: 0.05, unknown: 0.05 } } };
+  validateAnswers(choices, roundedChoice);
+  assert.throws(() => validateAnswers(choices, { blocker: { ...roundedChoice.blocker, probabilities: { ...roundedChoice.blocker.probabilities, none: 0.4 } } }), /sum to 1/);
+
+  const scores = { fit: { type: 'score', criteria: ['none', 'weak', 'plausible', 'strong'] } };
+  const roundedScore = { fit: { type: 'score', score: 2.95, confidence: 0.84, probabilities: { 0: 0.01, 1: 0.01, 2: 0, 3: 0.97 } } };
+  validateAnswers(scores, roundedScore);
+  assert.throws(() => validateAnswers(scores, { fit: { ...roundedScore.fit, score: 2 } }), /expected score/);
+});
 test('pack rejects mutable aliases, unsafe paths and undeclared questions', () => {
   assert.throws(() => validatePack({ ...triage, model: 'jev-latest' }), /Pin/);
   for (const field of ['state.__proto__.secret', 'answers.unknown.noul', 'state.undeclared']) {
