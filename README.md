@@ -31,6 +31,8 @@ The offline demo routes a synthetic ticket to `billing`, raises its probability
 threshold from 0.90 to 0.97, then shows that the same judgment would become `review`.
 No key, install or build is required. These fixture probabilities are not measured Jev results.
 
+For a commerce example, run `node examples/refund-review-demo.mjs`. It holds the same synthetic refund judgment constant while changing verified identity and host-computed purchase age. The outcome changes from `eligible_for_review` to `review`; no refund or payment is executed.
+
 ```sh
 node bin/decisionpacks.mjs validate packs/support-triage.json
 node bin/decisionpacks.mjs run packs/support-triage.json examples/billing-state.json --fixture examples/synthetic-billing-response.json
@@ -57,7 +59,7 @@ local HTTP server implementing the documented request and response protocol.
 GitHub distribution (not an npm registry release):
 
 ```sh
-npm install github:gbesse/decisionpacks#v0.1.0
+npm install github:gbesse/decisionpacks#v0.2.1
 ```
 
 ```js
