@@ -1,6 +1,6 @@
 {
   "name": "@gbesse/decisionpacks",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Portable, versioned decision contracts for Jev with validated answers and policy replay.",
   "type": "module",
   "exports": {
