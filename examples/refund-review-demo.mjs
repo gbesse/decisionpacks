@@ -16,6 +16,8 @@ const base = {
 const scenarios = [
   ['verified, inside policy', base],
   ['identity not verified', { ...base, customerVerified: false }],
+  ['maximum permitted amount', { ...base, amountCents: 10000 }],
+  ['one cent above limit', { ...base, amountCents: 10001 }],
   ['purchase 31 days ago', { ...base, daysSincePurchase: 31 }],
 ];
 
