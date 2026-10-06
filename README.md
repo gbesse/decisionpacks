@@ -93,6 +93,8 @@ remain deterministic host responsibilities.
 
 ## Policy migration without re-running the model
 
+The [refund review example](examples/refund-review-demo.mjs) now compares 10,000 and 10,001 cents at the declared limit, alongside identity and age checks. Run `node examples/refund-review-demo.mjs`; the synthetic score alone never authorizes a payment. / L'exemple compare les deux côtés de la limite et ne déclenche aucun paiement. / El ejemplo compara ambos lados del límite y no ejecuta ningún pago.
+
 ```js
 import { replay } from '@gbesse/decisionpacks';
 const changes = replay(newPack, [{ record: oldRecord, state: originalState }]);
