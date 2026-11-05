@@ -128,3 +128,12 @@ There is no hosted registry, marketplace or automatic learning service in this a
 Independent project; not affiliated with TypeSafe AI. Protocol reference:
 [TypeSafe API](https://docs.typesafe.ai/api), [confidence](https://docs.typesafe.ai/confidence),
 [known model limitations](https://docs.typesafe.ai/model-jaggedness/jev-1.13).
+
+
+## 2026-11-05 — FR / EN / ES
+
+FR : `replaySummary(pack, records)` ajoute une matrice de transitions avant/après au rejeu existant, refuse les identifiants de reçus dupliqués et ne rappelle aucun fournisseur. Les contrôles d’empreinte et de questions du rejeu restent obligatoires.
+
+EN: `replaySummary(pack, records)` adds before/after transition counts to existing replay, rejects duplicate receipt IDs and makes no provider calls. Existing input and question fingerprint checks remain mandatory.
+
+ES: `replaySummary(pack, records)` añade conteos de transiciones antes/después a reproducción existente, rechaza identificadores duplicados y no llama proveedor. Siguen obligatorias huellas de entrada y preguntas.

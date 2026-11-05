@@ -14,3 +14,5 @@ export function decide(pack: Pack, state: Record<string, JSONValue>, answers: Re
 export function createJevProvider(options?: { apiKey?: string; endpoint?: string; timeoutMs?: number; fetchImpl?: typeof fetch }): Provider;
 export function evaluate(pack: Pack, state: Record<string, JSONValue>, options: { provider: Provider; signal?: AbortSignal; timeoutMs?: number; onRecord?: (record: DecisionRecord) => Promise<void> }): Promise<DecisionRecord>;
 export function replay(pack: Pack, records: { record: DecisionRecord; state: Record<string, JSONValue> }[]): { id: string; before: string; after: string; ruleId: string | null; changed: boolean }[];
+
+export function replaySummary(pack:any,records:any[]):{rows:any[];total:number;changed:number;transitions:Array<{before:string;after:string;count:number}>;providerCalls:number};
