@@ -90,3 +90,11 @@ export function replay(pack, records) {
     return { id: record.id, before: record.outcome, after: after.outcome, ruleId: after.ruleId, changed: record.outcome !== after.outcome };
   });
 }
+
+export function replaySummary(pack,records){
+ ensure(Array.isArray(records)&&records.length<=10000,'FR: Rejeu trop grand. / EN: Replay too large. / ES: Reproducción demasiado grande.');
+ const ids=records.map(x=>x.record?.id);ensure(ids.every(x=>typeof x==='string'&&x)&&new Set(ids).size===ids.length,'FR: Identifiants de reçus uniques requis. / EN: Unique receipt IDs required. / ES: Se requieren identificadores únicos.');
+ const rows=replay(pack,records),transitions=new Map();
+ for(const row of rows){const key=JSON.stringify([row.before,row.after]);transitions.set(key,(transitions.get(key)||0)+1);}
+ return {rows,total:rows.length,changed:rows.filter(x=>x.changed).length,transitions:[...transitions].map(([key,count])=>{const [before,after]=JSON.parse(key);return {before,after,count};}),providerCalls:0};
+}
