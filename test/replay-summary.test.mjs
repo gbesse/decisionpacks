@@ -1,3 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {evaluate,replaySummary}from '../src/index.mjs';
 test('empty replay has no calls and no invented changes',()=>{const pack=JSON.parse(fs.readFileSync('packs/support-triage.json'));const x=replaySummary(pack,[]);assert.equal(x.total,0);assert.equal(x.providerCalls,0);});
 test('duplicate receipt IDs cannot inflate transition counts',()=>{const pack=JSON.parse(fs.readFileSync('packs/support-triage.json'));assert.throws(()=>replaySummary(pack,[{record:{id:'x'}},{record:{id:'x'}}]),/Unique/);});
+
+test('real receipt migration gives billing to review transition',async()=>{const read=p=>JSON.parse(fs.readFileSync(p));const pack=read('packs/support-triage.json'),state=read('examples/billing-state.json'),response=read('examples/synthetic-billing-response.json');const record=await evaluate(pack,state,{provider:async()=>response});const next=structuredClone(pack);next.rules[0].all[1].value=.97;const x=replaySummary(next,[{record,state}]);assert.equal(x.changed,1);assert.deepEqual(x.transitions,[{before:'billing',after:'review',count:1}]);assert.equal(x.providerCalls,0);});
