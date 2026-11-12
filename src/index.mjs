@@ -98,3 +98,5 @@ export function replaySummary(pack,records){
  for(const row of rows){const key=JSON.stringify([row.before,row.after]);transitions.set(key,(transitions.get(key)||0)+1);}
  return {rows,total:rows.length,changed:rows.filter(x=>x.changed).length,transitions:[...transitions].map(([key,count])=>{const [before,after]=JSON.parse(key);return {before,after,count};}),providerCalls:0};
 }
+
+export * from './sprint-nov12.mjs';
