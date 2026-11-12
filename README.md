@@ -137,3 +137,12 @@ FR : `replaySummary(pack, records)` ajoute une matrice de transitions avant/apr�
 EN: `replaySummary(pack, records)` adds before/after transition counts to existing replay, rejects duplicate receipt IDs and makes no provider calls. Existing input and question fingerprint checks remain mandatory.
 
 ES: `replaySummary(pack, records)` añade conteos de transiciones antes/después a reproducción existente, rechaza identificadores duplicados y no llama proveedor. Siguen obligatorias huellas de entrada y preguntas.
+
+
+## 2026-11-12 — FR / EN / ES
+
+FR : Ventiler les migrations de règles par résultat initial et conserver les dénominateurs.
+
+EN: Break rule migrations down by original outcome while preserving denominators.
+
+ES: Desglosar migraciones de reglas por resultado original conservando denominadores.

@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import fs from 'node:fs';import {evaluate,replayByOutcome}from '../src/index.mjs';const read=p=>JSON.parse(fs.readFileSync(p));
+test('actual receipt cohort preserves denominator',async()=>{const pack=read('packs/support-triage.json'),state=read('examples/billing-state.json'),response=read('examples/synthetic-billing-response.json');const record=await evaluate(pack,state,{provider:async()=>response});const next=structuredClone(pack);next.rules[0].all[1].value=.97;const x=replayByOutcome(next,[{record,state}]);assert.equal(x.groups[0].before,'billing');assert.equal(x.groups[0].changedTo.review,1);assert.equal(x.groups[0].total,1);assert.equal(x.providerCalls,0);});
+test('empty cohort remains empty',()=>assert.deepEqual(replayByOutcome(read('packs/support-triage.json'),[]).groups,[]));
+test('duplicate receipt IDs refused before replay',()=>assert.throws(()=>replayByOutcome(read('packs/support-triage.json'),[{record:{id:'x'}},{record:{id:'x'}}])));
